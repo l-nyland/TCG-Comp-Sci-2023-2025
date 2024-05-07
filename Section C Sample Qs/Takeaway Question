@@ -1,3 +1,5 @@
+#"borrowed" from another teacher! I didn't make this!!
+
 takeaway_menu = ["1. Pad Thai","2. Chicken Tikka Masala","3. Pepperoni Pizza","4. Veggie Burger with Fries","5. Burrito Bowl"]
 takeaway_prices = [12.99, 14.50,  9.99,  15.99,  11.50]
 delivery_fee = 5.00
