@@ -1,0 +1,106 @@
+
+//pick a random number between 1 and 10
+let secretNumber
+let guessCount = 0;
+let minValue;
+let maxValue;
+makeSecretNumber();
+
+
+//Set up an event handler for the submit button and new Game Button
+const submitButton = document.getElementById("submit-Button");
+submitButton.addEventListener("click", checkGuess);
+const newGameButton = document.getElementById("newGame-Button");
+newGameButton.addEventListener("click", newGame)
+newGameButton.disabled = true;
+
+//Set up a listener and handler for the check box
+let checkBox = document.getElementById("showHideNumber");
+checkBox.addEventListener("click", showHideNumber);
+
+//Set up listeners for the min and Max boxes
+let minNumberChange = document.getElementById("lowNumber");
+minNumberChange.addEventListener("change", makeSecretNumber);
+let maxNumberChange = document.getElementById("highNumber");
+maxNumberChange.addEventListener("change", makeSecretNumber);
+
+function makeSecretNumber () {
+  minValue = Number(document.getElementById("lowNumber").value);
+  maxValue = Number(document.getElementById("highNumber").value);
+  secretNumber = Math.floor(Math.random() * (maxValue -minValue + 1)) + minValue;
+}
+
+//create function to check the checkGuess
+function checkGuess() {
+  guessCount = guessCount + 1;
+  const feedback = document.getElementById("right-or-wrong");
+  const guessField = document.getElementById("guessField");
+
+  let userGuess = Number(guessField.value);
+  let helpMessage = document.getElementById("lowOrHigh");
+  if (userGuess === secretNumber) {
+    feedback.textContent = "Congratulations";
+    feedback.style.backgroundColor = "green";
+    helpMessage.textContent = "";
+    gameOver();
+  }
+  else if (userGuess > secretNumber) {
+    feedback.textContent = "Wrong"; 
+    feedback.style.backgroundColor = "red";
+    helpMessage.textContent = "Your Guess is too High";
+  }
+  else if (userGuess < secretNumber) {
+    feedback.textContent = "Wrong"; 
+    feedback.style.backgroundColor = "red";
+    helpMessage.textContent = "Your Guess is too Low";
+  }
+
+let unorderedList = document.getElementById("previousGuesses");
+let newListItem = document.createElement("li");
+newListItem.textContent = guessField.value;
+unorderedList.appendChild(newListItem);
+guessField.value = ""// blank the field
+guessField.focus(); 
+
+}
+
+function showHideNumber() {
+  const computersNumber = document.getElementById("computersNumber");
+  if (checkBox.checked) {
+    computersNumber.style.visibility = "visible";
+    computersNumber.textContent = secretNumber;
+  }
+  else {
+    computersNumber.style.visibility = "hidden";
+  }
+}
+
+//This function displays the number of guesses
+function displayStats (){
+  let statsSection = document.getElementById("stats");
+  statsSection.textContent = "You took "+guessCount+" guesses";
+}
+//This function ends the game and resets the buttons to start new game
+function gameOver() {
+  submitButton.disabled = true;
+  newGameButton.disabled = false;
+  displayStats();
+}
+//Resets all controls and variables to be ready for the new game. 
+function newGame () {
+  guessCount = 0;
+
+  submitButton.disabled = false;
+  newGameButton.disabled = true;
+
+  document.getElementById("computersNumber").textContent = "";
+  document.getElementById("showHideNumber").checked = false;
+  document.getElementById("right-or-wrong").textContent = "";
+  document.getElementById("lowOrHigh").textContent = "";
+  document.getElementById("previousGuesses").innerHTML = "";
+  document.getElementById("stats").textContent = "";
+  
+  minValue = Number(document.getElementById("lowNumber").value);
+  maxValue = Number(document.getElementById("highNumber").value);
+  secretNumber = Math.floor(Math.random() * (maxValue -minValue + 1)) + minValue; 
+}
