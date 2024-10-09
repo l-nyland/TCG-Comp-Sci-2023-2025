@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Event Demo 5 - Guessing Game</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1> Number Guessing Game </h1> 
+    <p> Pick a min and max number and then guess a random number between these two numbers </p>
+    <div>
+      <label for = "lowNumber"> Min: </label>
+      <input id = "lowNumber" type = "number" min = "1" max = "100" step = "1" value = "1">
+      <input id = "highNumber" type = "number" min = "1" max = "100" step = "1" value = "100">
+    </div> 
+    <input id = "showHideNumber" type = "checkbox">
+    <label id = "computersNumber"> </label> 
+    <br>
+    <br>
+    <label for = "guessField"> Enter a Guess: </label>
+    <input type = "text" id = "guessField">
+    <button id = "submit-Button" type = "button"> Submit Guess </button>
+    <button id = "newGame-Button" type = "button"> New Game </button>
+    <div id = "results"> 
+      <p id = "right-or-wrong"> </p>
+      <p id = "lowOrHigh"> </p>
+      <h4> Previous Guesses </h4> 
+      <ul id = "previousGuesses"> </ul>
+      <p id = "stats"></p>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
