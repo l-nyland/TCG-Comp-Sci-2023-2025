@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <title>Inserting Records into Firebase via HTML</title>
+<body>
+<h1>Data Gathering</h1>
+
+<p>please enter your details below</p>
+
+<input id="firstNameIn" placeholder="First name" />
+<br>
+<input id="lastNameIn" placeholder="Last name" />
+<br>
+<input id="YearIn" placeholder="Year Group" />
+<br>
+<input id="SubjectIn" placeholder="Favourite Subject"  />
+
+<script>
+//This is coming from Firebase - links this html page with your database. 
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBcVclQsB94ks7dL3HtLtNRRreL46md6FA",
+  authDomain: "msnylandproject.firebaseapp.com",
+  databaseURL: "https://msnylandproject-default-rtdb.firebaseio.com",
+  projectId: "msnylandproject",
+  storageBucket: "msnylandproject.firebasestorage.app",
+  messagingSenderId: "285506481851",
+  appId: "1:285506481851:web:bdf23b910ae9b5f3a9439e"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+</script>
+
+</body>
+</html>
