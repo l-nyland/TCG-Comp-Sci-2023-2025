@@ -1,0 +1,51 @@
+  <form id="form">
+            <label>Name:</label>
+            <input type="text" name="name" id="name" required><br><br>
+
+            <label for="county-dropdown">Select your County:</label>
+            <select id="county-dropdown">
+                <option value="Carlow">Carlow</option>
+                <option value="Cavan">Cavan</option>
+                <option value="Clare">Clare</option>
+                <option value="Cork">Cork</option>
+                <option value="Donegal">Donegal</option>
+                <option value="Dublin">Dublin</option>
+                <option value="Galway">Galway</option>
+                <option value="Kerry">Kerry</option>
+                <option value="Kildare">Kildare</option>
+                <option value="Kilkenny">Kilkenny</option>
+                <option value="Laois">Laois</option>
+                <option value="Leitrim">Leitrim</option>
+                <option value="Limerick">Limerick</option>
+                <option value="Longford">Longford</option>
+                <option value="Louth">Louth</option>
+                <option value="Mayo">Mayo</option>
+                <option value="Meath">Meath</option>
+                <option value="Monaghan">Monaghan</option>
+                <option value="Offaly">Offaly</option>
+                <option value="Roscommon">Roscommon</option>
+                <option value="Sligo">Sligo</option>
+                <option value="Tipperary">Tipperary</option>
+                <option value="Waterford">Waterford</option>
+                <option value="Westmeath">Westmeath</option>
+                <option value="Wexford">Wexford</option>
+            </select><br><br>
+
+            <label>Weekly Income:</label>
+            <input type="number" name="income" id="income" step="0.01" min="0" pattern="[0-9]*[.,]?[0-9]+" placeholder="e.g. 500.00" required><br><br>
+
+            <label>Employment Status:</label>
+            <input type="radio" name="employment" value="employed" required>Employed
+            <input type="radio" name="employment" value="unemployed" required>Unemployed
+            <input type="radio" name="employment" value="student" required>Student
+            <input type="radio" name="employment" value="other" required>Other<br><br>
+
+            <label>Homeowner:</label>
+            <select id="homeowner" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select><br><br>
+
+            <button type="submit">Submit Info</button>
+
+        </form>
