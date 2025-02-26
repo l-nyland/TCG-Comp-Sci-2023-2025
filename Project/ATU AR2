@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ireland Data</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pygal/2.4.0/pygal-tooltips.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.2.1/dist/pouchdb.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Form on Ireland</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="page2.html">Population</a>
+            <a href="page3.html">Tourism</a>
+            <a href="page4.html">Housing</a>
+            <a href="page5.html">Form</a>
+    </header>
+
+    <main>
+        <h2>Form on your information</h2>
+        <form id="form">
+            <label>Name:</label>
+            <input type="text" name="name" id="name" required><br><br>
+
+            <label for="county-dropdown">Select your County:</label>
+            <select id="county-dropdown">
+                <option value="Carlow">Carlow</option>
+                <option value="Cavan">Cavan</option>
+                <option value="Clare">Clare</option>
+                <option value="Cork">Cork</option>
+                <option value="Donegal">Donegal</option>
+                <option value="Dublin">Dublin</option>
+                <option value="Galway">Galway</option>
+                <option value="Kerry">Kerry</option>
+                <option value="Kildare">Kildare</option>
+                <option value="Kilkenny">Kilkenny</option>
+                <option value="Laois">Laois</option>
+                <option value="Leitrim">Leitrim</option>
+                <option value="Limerick">Limerick</option>
+                <option value="Longford">Longford</option>
+                <option value="Louth">Louth</option>
+                <option value="Mayo">Mayo</option>
+                <option value="Meath">Meath</option>
+                <option value="Monaghan">Monaghan</option>
+                <option value="Offaly">Offaly</option>
+                <option value="Roscommon">Roscommon</option>
+                <option value="Sligo">Sligo</option>
+                <option value="Tipperary">Tipperary</option>
+                <option value="Waterford">Waterford</option>
+                <option value="Westmeath">Westmeath</option>
+                <option value="Wexford">Wexford</option>
+            </select><br><br>
+
+            <label>Weekly Income:</label>
+            <input type="number" name="income" id="income" step="0.01" min="0" pattern="[0-9]*[.,]?[0-9]+" placeholder="e.g. 500.00" required><br><br>
+
+            <label>Employment Status:</label>
+            <input type="radio" name="employment" value="employed" required>Employed
+            <input type="radio" name="employment" value="unemployed" required>Unemployed
+            <input type="radio" name="employment" value="student" required>Student
+            <input type="radio" name="employment" value="other" required>Other<br><br>
+
+            <label>Homeowner:</label>
+            <select id="homeowner" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select><br><br>
+
+            <button type="submit">Submit Info</button>
+
+        </form>
+
+        <h2>Data Analytics</h2>
+        <p>Here are some analytics on the data</p>
+        <p id="numberofforms"></p>
+        <p id="averageincome"></p>
+        <p id="avgwageemployed"></p>
+        <p id="avgwageothers"></p>
+        <p id="highestincome"></p>
+        <p id="percentagehomeowners"></p>
+        <p id="percentagenothomeowners"></p>
+
+        <h2>Stored Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>County</th>
+                    <th>Income</th>
+                    <th>Employment</th>
+                    <th>Homeowner</th>
+                </tr>
+            </thead>
+
+            <tbody id="data">
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+
+    </main>
+
+    <footer>
+        <hr>
+        <p>&copy; 2025 Ireland Data</p>
+    </footer>
+
+    <script>
+        const db = new PouchDB('ATUform');
+        db.allDocs({include_docs: true, descending: true}).then(function(result) {
+            console.log(result.rows.map(row => row.doc));
+        })
+
+        showData();
+
+        document.getElementById('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const county = document.getElementById('county-dropdown').value;
+            const income = document.getElementById('income').value;
+            const employment = document.querySelector('input[name="employment"]:checked').value;
+            const homeowner = document.getElementById('homeowner').value;
+
+            if (!name || !county || !income || !employment || !homeowner) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if(isNaN(income)) {
+                alert('Income must be a number');
+                return;
+            }
+
+            if(income < 0) {
+                alert('Income must be a positive number');
+                return;
+            }
+
+            db.post({
+                _id: new Date().toISOString(),
+                name: name,
+                county: county,
+                income: income,
+                employment: employment,
+                homeowner: homeowner
+            }).then(function(response) {
+                console.log(response);
+                showData();
+                form.reset();
+            }).catch(function(err) {
+                console.log(err);
+            });
+        });
+
+        function showData() {
+            db.allDocs({include_docs: true, descending: true}).then(function(result) {
+                const data = result.rows.map(row => row.doc);
+                const tbody = document.getElementById('data');
+                tbody.innerHTML = '';
+
+                data.forEach(function(row) {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${row.name}</td>
+                            <td>${row.county}</td>
+                            <td>${row.income}</td>
+                            <td>${row.employment}</td>
+                            <td>${row.homeowner}</td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById('numberofforms').textContent = "Number of forms: "+data.length;
+                let totalincome = 0;
+                for (let i = 0; i < data.length; i++) {
+                    totalincome += parseFloat(data[i].income);
+                }
+                document.getElementById('averageincome').textContent = "Average Income: "+(totalincome/data.length).toFixed(2);
+
+                let totalwageemployed = 0;
+                let totalwageothers = 0;
+                let employed = 0;
+                let others = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if(data[i].employment === "employed") {
+                        totalwageemployed += parseFloat(data[i].income);
+                        employed++;
+                    } else {
+                        totalwageothers += parseFloat(data[i].income);
+                        others++;
+                    }
+                }
+                document.getElementById('avgwageemployed').textContent = "Average Wage of Employed: "+(totalwageemployed/employed).toFixed(2);
+                document.getElementById('avgwageothers').textContent = "Average Wage of Others: "+(totalwageothers/others).toFixed(2);
+
+                let highestincome = 0;
+                let highestname = "";
+                let highestcounty = "";
+
+                for (let i = 0; i < data.length; i++) {
+                    if(parseFloat(data[i].income) > highestincome) {
+                        highestincome = parseFloat(data[i].income);
+                        highestname = data[i].name;
+                        highestcounty = data[i].county;
+                    }
+                }
+                document.getElementById('highestincome').textContent = "Highest Income: "+highestname+" from "+highestcounty+" with "+highestincome;
+
+                let homeowners = 0;
+                let nohomeowners = 0;
+                for (let i = 0; i < data.length; i++) {
+                    if(data[i].homeowner === "yes") {
+                        homeowners++;
+                    } else {
+                        nohomeowners++;
+                    }
+                }
+                document.getElementById('percentagehomeowners').textContent = "Percentage of Homeowners: "+((homeowners/data.length)*100).toFixed(2)+"%";
+                document.getElementById('percentagenothomeowners').textContent = "Percentage of Non-Homeowners: "+((nohomeowners/data.length)*100).toFixed(2)+"%";
+
+            }).catch(function(err) {
+                console.log(err);
+            });
+        }
+
+
+    </script>
+</body>
+</html>
